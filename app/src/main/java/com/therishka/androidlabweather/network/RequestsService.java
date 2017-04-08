@@ -76,7 +76,7 @@ public class RequestsService extends IntentService {
                     .getWeather(cityName)
                     .execute()
                     .body();
-            Where mWhere = Where.create();
+            Where mWhere = Where.create().equalTo(CityContract.CityEntry.COLUMN_CITY_NAME, cityName);
             getContentResolver().delete(CityContract.getUri(), mWhere.where(), mWhere.whereArgs());
             getContentResolver().insert(CityContract.getUri(), new CityContract().toValues(city));
             getContentResolver().notifyChange(CityContract.getUri(), null);
