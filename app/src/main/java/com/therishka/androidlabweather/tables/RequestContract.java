@@ -7,7 +7,7 @@ import android.net.Uri;
 import android.provider.BaseColumns;
 import android.support.annotation.NonNull;
 
-import com.therishka.androidlabweather.WeatherProvider;
+import com.therishka.androidlabweather.data.WeatherProvider;
 import com.therishka.androidlabweather.network.NetworkRequests;
 import com.therishka.androidlabweather.network.Request;
 import com.therishka.androidlabweather.network.RequestStatus;

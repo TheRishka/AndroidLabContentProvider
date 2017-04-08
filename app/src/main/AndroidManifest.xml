@@ -23,7 +23,7 @@
             android:enabled="true"
             android:exported="false"/>
         <provider
-            android:name=".WeatherProvider"
+            android:name=".data.WeatherProvider"
             android:authorities="com.therishka.androidlabweather"
             android:exported="false"/>
     </application>

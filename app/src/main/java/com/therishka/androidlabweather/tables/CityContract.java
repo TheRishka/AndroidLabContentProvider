@@ -8,7 +8,7 @@ import android.provider.BaseColumns;
 import android.support.annotation.NonNull;
 
 import com.google.gson.Gson;
-import com.therishka.androidlabweather.WeatherProvider;
+import com.therishka.androidlabweather.data.WeatherProvider;
 import com.therishka.androidlabweather.models.City;
 import com.therishka.androidlabweather.models.Main;
 import com.therishka.androidlabweather.models.Weather;

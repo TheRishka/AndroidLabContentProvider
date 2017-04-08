@@ -1,4 +1,4 @@
-package com.therishka.androidlabweather;
+package com.therishka.androidlabweather.data;
 
 import android.content.ContentProvider;
 import android.content.ContentUris;
