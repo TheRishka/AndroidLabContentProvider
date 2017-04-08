@@ -10,6 +10,7 @@ import android.text.TextUtils;
 
 import com.google.gson.Gson;
 import com.therishka.androidlabweather.models.City;
+import com.therishka.androidlabweather.tables.CityContract;
 import com.therishka.androidlabweather.tables.RequestContract;
 import com.therishka.androidlabweather.tables.Where;
 
@@ -75,11 +76,16 @@ public class RequestsService extends IntentService {
                     .getWeather(cityName)
                     .execute()
                     .body();
+            Where mWhere = Where.create();
+            getContentResolver().delete(CityContract.getUri(), mWhere.where(), mWhere.whereArgs());
+            getContentResolver().insert(CityContract.getUri(), new CityContract().toValues(city));
+            getContentResolver().notifyChange(CityContract.getUri(), null);
             request.setStatus(RequestStatus.SUCCESS);
         } catch (IOException e) {
             request.setStatus(RequestStatus.ERROR);
             request.setError(e.getMessage());
         } finally {
+            getContentResolver().insert(RequestContract.getUri(), new RequestContract().toValues(request));
             getContentResolver().notifyChange(RequestContract.getUri(), null);
         }
     }

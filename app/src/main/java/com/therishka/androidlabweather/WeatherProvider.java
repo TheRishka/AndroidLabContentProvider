@@ -100,12 +100,16 @@ public class WeatherProvider extends ContentProvider {
 
     @Override
     public int delete(@NonNull Uri uri, @Nullable String selection, @Nullable String[] selectionArgs) {
-        return 0;
+        SQLiteDatabase db = dbOpenHelper.getWritableDatabase();
+        String tableName = getType(uri);
+        return db.delete(tableName, selection, selectionArgs);
     }
 
     @Override
     public int update(@NonNull Uri uri, @Nullable ContentValues values, @Nullable String selection, @Nullable String[] selectionArgs) {
-        return 0;
+        SQLiteDatabase db = dbOpenHelper.getWritableDatabase();
+        String tableName = getType(uri);
+        return db.update(tableName, values, selection, selectionArgs);
     }
 
     public static Uri getBaseUri() {

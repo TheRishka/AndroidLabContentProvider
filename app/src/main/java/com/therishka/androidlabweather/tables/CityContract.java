@@ -1,6 +1,7 @@
 package com.therishka.androidlabweather.tables;
 
 import android.content.ContentValues;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.provider.BaseColumns;
@@ -9,6 +10,17 @@ import android.support.annotation.NonNull;
 import com.google.gson.Gson;
 import com.therishka.androidlabweather.WeatherProvider;
 import com.therishka.androidlabweather.models.City;
+import com.therishka.androidlabweather.models.Main;
+import com.therishka.androidlabweather.models.Weather;
+import com.therishka.androidlabweather.models.Wind;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.therishka.androidlabweather.tables.CityContract.CityEntry.COLUMN_CITY_NAME;
+import static com.therishka.androidlabweather.tables.CityContract.CityEntry.COLUMN_MAIN;
+import static com.therishka.androidlabweather.tables.CityContract.CityEntry.COLUMN_WEATHER;
+import static com.therishka.androidlabweather.tables.CityContract.CityEntry.COLUMN_WIND;
 
 /**
  * @author Rishad Mustafaev
@@ -19,10 +31,10 @@ public class CityContract {
 
     public void createTable(@NonNull SQLiteDatabase database) {
         TableBuilder.create(TABLE_NAME)
-                .textColumn(CityEntry.COLUMN_WIND)
-                .textColumn(CityEntry.COLUMN_CITY_NAME)
-                .textColumn(CityEntry.COLUMN_MAIN)
-                .textColumn(CityEntry.COLUMN_WEATHER)
+                .textColumn(COLUMN_WIND)
+                .textColumn(COLUMN_CITY_NAME)
+                .textColumn(COLUMN_MAIN)
+                .textColumn(COLUMN_WEATHER)
                 .execute(database);
     }
 
@@ -30,11 +42,31 @@ public class CityContract {
     public ContentValues toValues(@NonNull City city) {
         Gson mGson = new Gson();
         ContentValues values = new ContentValues();
-        values.put(CityEntry.COLUMN_CITY_NAME, city.getName());
-        values.put(CityEntry.COLUMN_WEATHER, mGson.toJson(city.getWeather()));
-        values.put(CityEntry.COLUMN_MAIN, mGson.toJson(city.getMain()));
-        values.put(CityEntry.COLUMN_WIND, mGson.toJson(city.getWind()));
+        values.put(COLUMN_CITY_NAME, city.getName());
+        values.put(COLUMN_WEATHER, mGson.toJson(city.getWeather()));
+        values.put(COLUMN_MAIN, mGson.toJson(city.getMain()));
+        values.put(COLUMN_WIND, mGson.toJson(city.getWind()));
         return values;
+    }
+
+
+    @NonNull
+    public City fromCursor(@NonNull Cursor cursor) {
+        City city = new City();
+        Gson mGson = new Gson();
+        city.setName(cursor.getString(cursor.getColumnIndex(
+                COLUMN_CITY_NAME)));
+
+        Weather weather = mGson.fromJson(cursor.getString(cursor.getColumnIndex(
+                COLUMN_WEATHER)), Weather.class);
+        List<Weather> weathers = new ArrayList<>();
+        weathers.add(weather);
+        city.setWeathers(weathers);
+
+        city.setMain(mGson.fromJson(cursor.getString(cursor.getColumnIndex(COLUMN_MAIN)), Main.class));
+        city.setWind(mGson.fromJson(cursor.getString(cursor.getColumnIndex(COLUMN_WIND)), Wind.class));
+
+        return city;
     }
 
     public static Uri getUri() {
